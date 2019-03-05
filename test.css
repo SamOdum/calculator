@@ -1,0 +1,90 @@
+body {
+    box-sizing: border-box;
+}
+
+.main-container { 
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 100px;
+    grid-template-rows: auto;
+    /* flex-direction: column; */
+    background-color: rebeccapurple;
+    /* height: 150px; */
+}
+
+.box {
+    padding: 5px 15px;
+    border: 2px solid rgb(206, 174, 174);
+    /* display: none; */
+    opacity: 0;
+    height: 0px;
+    transform-origin: bottom;
+    transition: all 1.5s;
+    position: relative;
+}
+
+.boxen {
+    padding: 5px 15px;
+    border: 2px solid #000;
+    transition: all 1s;
+
+}
+
+#box1 {
+    background-color: #0ed;
+    cursor: pointer;
+}
+
+#box2 {
+    background-color: #de0;
+    cursor: pointer;
+}
+
+#box3 {
+    background-color: rgb(75, 238, 0);
+}
+
+#box4 {
+    background-color: rgb(0, 143, 238);
+}
+
+#box5 {
+    background-color: rgb(238, 8, 0);
+}
+
+.visible {
+    /* display: block; */
+    opacity: 1; 
+    height: 50px;
+    /* animation: grow 3; */
+}
+
+@keyframes grow {
+    from { 
+        height: 1;
+        opacity: 0;
+    }
+    
+    to{ 
+        height: 50px;
+        opacity: 1;
+    }
+}
+
+#btn {
+    margin-top: 10px;
+    cursor: pointer;
+    padding: 10px 15px;
+    background-color: bisque;
+    border-style: none;
+    transition: all 0.5s;
+}
+
+#btn:hover {
+    background-color: #000;
+    color: bisque;
+}
