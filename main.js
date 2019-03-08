@@ -5,9 +5,11 @@
 let xSquare = getId("x-square");
 let xCube = getId("x-cube");
 const swapBtn = getId("swap");
-let sciOperator = document.querySelectorAll(".sci-operator");
+const sciOperator = document.querySelectorAll(".sci-operator");
 const baseNum = document.querySelectorAll(".base-number");
 const inputDisplay = document.querySelector(".p-display");
+const inputOutput = document.querySelector(".p-output");
+const clearBtn = document.getElementById("clear");
 
 
 /* ************************ */
@@ -46,17 +48,37 @@ swapBtn.addEventListener("click", function(){
 });
 
 
-//demonstrate that buttons are firing OK
+//Button click operation
 sciOperator.forEach(function (sciOperator) {
     sciOperator.addEventListener("click", function () {
-        console.log(sciOperator.id);
+        inputDisplay.textContent += sciOperator.value;
     });
 });
 
 baseNum.forEach(function (baseNum) {
     baseNum.addEventListener("click", function () {
-        console.log(baseNum.id);
+        inputDisplay.textContent += baseNum.value;
     });
 });
+
+clearBtn.addEventListener("click", function() {
+    inputDisplay.textContent = "";
+});
+
+//Button keypress operation
+document.addEventListener("keypress", function (e) {
+
+    const validKeys = [
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ".", "/", "*", "-", "+", "^", "(", ")", "="
+    ];
+
+    if (validKeys.includes(e.key)) {
+        inputDisplay.textContent += e.key;
+        console.log(e.key);
+    }
+
+
+});
+
 
 

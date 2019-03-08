@@ -3,12 +3,14 @@ button {
   padding: 1em 1em; }
 
 header div {
-  padding: 0.5em;
   text-align: right;
   font-weight: bold; }
 
 div p {
-  padding: 0.5em;
+  text-align: right;
+  font-weight: bold; }
+
+header div p {
   text-align: right;
   font-weight: bold; }
 
@@ -32,7 +34,7 @@ div p {
 header {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: repeat(2, 1fr); }
+  grid-template-rows: repeat(2, minmax(40px, 50px)); }
 
 main {
   display: grid;
@@ -42,7 +44,7 @@ main {
 /* ==== MODULES ==== */
 .first-set,
 .second-set {
-  height: 1%;
+  height: 50%;
   opacity: 0;
   z-index: 0;
   transition: all 0.5s; }
@@ -104,8 +106,5 @@ main {
 
 .is-clicked {
   border-bottom: solid 4px green; }
-
-.lead {
-  height: 82px; }
 
 /*# sourceMappingURL=main.css.map */
