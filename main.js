@@ -7,10 +7,11 @@ let xCube = getId("x-cube");
 const swapBtn = getId("swap");
 let sciOperator = document.querySelectorAll(".sci-operator");
 const baseNum = document.querySelectorAll(".base-number");
+const inputDisplay = document.querySelector(".p-display");
 
 
 /* ************************ */
-// function declaretions
+// function declarations
 /* ************************ */
 
 //function for getting DOM node Ids.
@@ -51,11 +52,7 @@ sciOperator.forEach(function (sciOperator) {
         console.log(sciOperator.id);
     });
 });
-sciOperator.forEach(function (sciOperator) {
-    sciOperator.addEventListener("click", function () {
-        console.log(sciOperator.id);
-    });
-});
+
 baseNum.forEach(function (baseNum) {
     baseNum.addEventListener("click", function () {
         console.log(baseNum.id);
