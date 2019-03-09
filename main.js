@@ -5,9 +5,12 @@
 let xSquare = getId("x-square");
 let xCube = getId("x-cube");
 const swapBtn = getId("swap");
-let sciOperator = document.querySelectorAll(".sci-operator");
+const sciOperator = document.querySelectorAll(".sci-operator");
 const baseNum = document.querySelectorAll(".base-number");
 const inputDisplay = document.querySelector(".p-display");
+const inputOutput = document.querySelector(".p-output");
+const clearBtn = document.getElementById("clear");
+const backSpace = document.getElementById("bck-space");
 
 
 /* ************************ */
@@ -46,17 +49,50 @@ swapBtn.addEventListener("click", function(){
 });
 
 
-//demonstrate that buttons are firing OK
+//Button click operation
 sciOperator.forEach(function (sciOperator) {
     sciOperator.addEventListener("click", function () {
-        console.log(sciOperator.id);
+        inputDisplay.textContent += sciOperator.value;
     });
 });
 
 baseNum.forEach(function (baseNum) {
     baseNum.addEventListener("click", function () {
-        console.log(baseNum.id);
+        inputDisplay.textContent += baseNum.value;
     });
 });
 
+clearBtn.addEventListener("click", function() {
+    inputDisplay.textContent = "";
+});
+
+//Button keypress operation
+document.addEventListener("keypress", function (e) {
+
+    const validKeyCode = [
+        48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
+        96, 97, 98, 99, 100, 101, 102, 103, 104,
+        105, 106, 107, 109, 110, 111, 173
+    ];
+
+    // for (let index in validKeyCode) {
+    //     if (validKeyCode[index] == e.keyCode) {
+    //         inputDisplay.textContent += e.key;
+    //         console.log(e.keyCode);
+    //     }
+    // }
+
+    if (validKeyCode.includes(e.keyCode)) {
+        inputDisplay.textContent += e.key;
+        console.log(e.key);
+    }
+
+
+});
+
+//Backspace button
+backSpace.addEventListener("click", function() {
+    let currentDisplay = inputDisplay.textContent;
+    inputDisplay.textContent = currentDisplay.substr(0, currentDisplay.length-1);
+});
 
