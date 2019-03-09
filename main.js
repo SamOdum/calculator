@@ -10,6 +10,7 @@ const baseNum = document.querySelectorAll(".base-number");
 const inputDisplay = document.querySelector(".p-display");
 const inputOutput = document.querySelector(".p-output");
 const clearBtn = document.getElementById("clear");
+const backSpace = document.getElementById("bck-space");
 
 
 /* ************************ */
@@ -68,24 +69,30 @@ clearBtn.addEventListener("click", function() {
 //Button keypress operation
 document.addEventListener("keypress", function (e) {
 
-    const validKeys = [
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ".", "/", "*", "-", "+", "^", "(", ")", "="
+    const validKeyCode = [
+        48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
+        96, 97, 98, 99, 100, 101, 102, 103, 104,
+        105, 106, 107, 109, 110, 111, 173
     ];
 
-    for (let index of validKeys) {
-        if (validKeys[index] == e.key) {
-            inputDisplay.textContent += e.key;
-            console.log(e.key);
-        }
-    }
-
-    // if (validKeys.includes(e.key)) {
-    //     inputDisplay.textContent += e.key;
-    //     console.log(e.key);
+    // for (let index in validKeyCode) {
+    //     if (validKeyCode[index] == e.keyCode) {
+    //         inputDisplay.textContent += e.key;
+    //         console.log(e.keyCode);
+    //     }
     // }
+
+    if (validKeyCode.includes(e.keyCode)) {
+        inputDisplay.textContent += e.key;
+        console.log(e.key);
+    }
 
 
 });
 
-
+//Backspace button
+backSpace.addEventListener("click", function() {
+    let currentDisplay = inputDisplay.textContent;
+    inputDisplay.textContent = currentDisplay.substr(0, currentDisplay.length-1);
+});
 

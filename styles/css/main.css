@@ -41,6 +41,12 @@ main {
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(7, 1fr); }
 
+aside {
+  display: flex;
+  flex-direction: column;
+  justify-items: flex-end;
+  justify-content: space-between; }
+
 /* ==== MODULES ==== */
 .first-set,
 .second-set {
