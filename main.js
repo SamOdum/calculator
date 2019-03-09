@@ -72,10 +72,17 @@ document.addEventListener("keypress", function (e) {
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ".", "/", "*", "-", "+", "^", "(", ")", "="
     ];
 
-    if (validKeys.includes(e.key)) {
-        inputDisplay.textContent += e.key;
-        console.log(e.key);
+    for (let index of validKeys) {
+        if (validKeys[index] == e.key) {
+            inputDisplay.textContent += e.key;
+            console.log(e.key);
+        }
     }
+
+    // if (validKeys.includes(e.key)) {
+    //     inputDisplay.textContent += e.key;
+    //     console.log(e.key);
+    // }
 
 
 });
