@@ -5,12 +5,16 @@
 let xSquare = getId("x-square");
 let xCube = getId("x-cube");
 const swapBtn = getId("swap");
+const buttons = document.getElementsByTagName("button");
 const sciOperator = document.querySelectorAll(".sci-operator");
+const baseOperator = document.querySelectorAll(".base-operator");
 const baseNum = document.querySelectorAll(".base-number");
 const inputDisplay = document.querySelector(".p-display");
 const inputOutput = document.querySelector(".p-output");
 const clearBtn = document.getElementById("clear");
 const backSpace = document.getElementById("bck-space");
+const equals = document.getElementById("equals");
+let evaluationResult = false;
 
 
 /* ************************ */
@@ -51,19 +55,54 @@ swapBtn.addEventListener("click", function(){
 
 //Button click operation
 sciOperator.forEach(function (sciOperator) {
-    sciOperator.addEventListener("click", function () {
-        inputDisplay.textContent += sciOperator.value;
-    });
+    sciOperator.addEventListener("click", function() {
+        for (let i = 0; i < sciOperator.length; i++) {
+            if (sciOperator[i].classList.contains("base-number"))
+                inputDisplay.textContent = inputDisplay.textContent;
+            }
+        }
+    );
 });
+//     sciOperator.addEventListener("click", function () {
+//         for (let i = 0; i < sciOperator.length; i++) {
+//             if (sciOperator[i].classList.contains("base-operator") {
+//                 inputDisplay.textContent = inputDisplay.textContent;
+//             }
+//         }
+//     )
+//     );
+// });
+
+//>>What happens when a number button is clicked?
+/*  Reset Output if evaluation has already occurred,
+*   Print fresh number to Display in that case.
+*   Set evaluation bollean back to false.
+*   Check if evaluation operation is underway,
+*   If so, have Display print only current number.
+*   Other than that, concat and print to Display.
+*/
 
 baseNum.forEach(function (baseNum) {
     baseNum.addEventListener("click", function () {
-        inputDisplay.textContent += baseNum.value;
+        if (evaluationResult) {
+            inputOutput.textContent = "";
+            inputDisplay.textContent = baseNum.value;
+
+            evaluationResult = false;
+            inputOutput.textContent += inputDisplay.textContent;
+
+        } else if ((inputDisplay.textContent !== "") && (inputOutput.textContent !== "")) {
+            inputDisplay.textContent = baseNum.value;
+        } else {
+            inputDisplay.textContent += baseNum.value;
+        }
     });
 });
 
+//Clear button behavior
 clearBtn.addEventListener("click", function() {
     inputDisplay.textContent = "";
+    inputOutput.textContent = "";
 });
 
 //Button keypress operation
@@ -75,17 +114,22 @@ document.addEventListener("keypress", function (e) {
         105, 106, 107, 109, 110, 111, 173
     ];
 
-    // for (let index in validKeyCode) {
+    if (validKeyCode.indexOf(e.keyCode) !== -1) {
+        inputDisplay.textContent += e.key;
+        console.log(e.keyCode);
+    } else return false;
+
+    // for (let index of validKeyCode) {
     //     if (validKeyCode[index] == e.keyCode) {
     //         inputDisplay.textContent += e.key;
     //         console.log(e.keyCode);
     //     }
     // }
 
-    if (validKeyCode.includes(e.keyCode)) {
-        inputDisplay.textContent += e.key;
-        console.log(e.key);
-    }
+    // if (validKeyCode.includes(e.keyCode)) {
+    //     inputDisplay.textContent += e.key;
+    //     console.log(e.key);
+    // }
 
 
 });
@@ -96,3 +140,21 @@ backSpace.addEventListener("click", function() {
     inputDisplay.textContent = currentDisplay.substr(0, currentDisplay.length-1);
 });
 
+//Equals button
+equals.addEventListener("click", function() {
+    inputOutput.textContent += inputDisplay.textContent;
+
+    let currentDisplay = eval(inputOutput.textContent);
+    inputDisplay.textContent = currentDisplay;
+    
+    evaluationResult = true;
+});
+
+//Send stuff to .p-output
+baseOperator.forEach(function (baseOperator) {
+    baseOperator.addEventListener("click", function () {
+        inputOutput.textContent += inputDisplay.textContent + baseOperator.value;
+        if (evaluationResult)
+        inputOutput.textContent = inputDisplay.textContent + baseOperator.value;
+    });
+});

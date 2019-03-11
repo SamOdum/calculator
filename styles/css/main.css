@@ -46,6 +46,8 @@ aside {
   flex-direction: column;
   justify-items: flex-end;
   justify-content: space-between; }
+  aside .trash {
+    align-self: flex-end; }
 
 /* ==== MODULES ==== */
 .first-set,
