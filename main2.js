@@ -3,10 +3,12 @@ function readContent(x) {
 }
 
 function writeContent(content) {
-    return document.querySelector(".p-display").textContent = content;
+    let displayContent = document.querySelector(".p-display").textContent;
+    displayContent = contentt;
+    return displayContent;
 }
 
-function Button(id, value, content) {   
+function Button(id, value, content) {
     this.id = document.getElementById(id);
     this.value = value;
     sciOperator = false;
