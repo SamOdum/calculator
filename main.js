@@ -15,6 +15,7 @@ const clearBtn = document.getElementById("clear");
 const backSpace = document.getElementById("bck-space");
 const equals = document.getElementById("equals");
 let evaluationResult = false;
+const historyNode = document.querySelector(".history-content");
 
 
 /* ************************ */
@@ -32,9 +33,9 @@ function swapButtons() {
         if (sciOperator[i].classList == "sci-operator first-set is-visible")
             sciOperator[i].classList.remove("is-visible");
         else if (sciOperator[i].classList == "sci-operator second-set is-visible")
-            sciOperator[i].classList.remove("is-visible");
-        else
-            sciOperator[i].classList.add("is-visible");
+        sciOperator[i].classList.remove("is-visible");
+    else
+        sciOperator[i].classList.add("is-visible");
 
 
     console.log("You Clicked Swap!");
@@ -48,20 +49,19 @@ function swapButtons() {
 
 //listen for click on swapBtn and call swapButtons()
 swapBtn.addEventListener("click", swapButtons);
-swapBtn.addEventListener("click", function(){
+swapBtn.addEventListener("click", function() {
     swapBtn.classList.toggle("is-clicked");
 });
 
 
 //Button click operation
-sciOperator.forEach(function (sciOperator) {
+sciOperator.forEach(function(sciOperator) {
     sciOperator.addEventListener("click", function() {
         for (let i = 0; i < sciOperator.length; i++) {
             if (sciOperator[i].classList.contains("base-number"))
                 inputDisplay.textContent = inputDisplay.textContent;
-            }
         }
-    );
+    });
 });
 //     sciOperator.addEventListener("click", function () {
 //         for (let i = 0; i < sciOperator.length; i++) {
@@ -74,27 +74,39 @@ sciOperator.forEach(function (sciOperator) {
 // });
 
 //>>What happens when a number button is clicked?
-/*  Reset Output if evaluation has already occurred,
-*   Print fresh number to Display in that case.
-*   Set evaluation bollean back to false.
-*   Check if evaluation operation is underway,
-*   If so, have Display print only current number.
-*   Other than that, concat and print to Display.
-*/
+/*   If evaluation has already occurred,
+ *   Pass both display and output to history
+ *   Set evaluation bollean back to false.
+ *   Reset output and print fresh number to Display.
+ *   Check if evaluation operation is underway,
+ *   If so, have Display print only current number.
+ *   If not, concat and print to Display.
+ */
 
-baseNum.forEach(function (baseNum) {
-    baseNum.addEventListener("click", function () {
+baseNum.forEach(function(baseNum) {
+    baseNum.addEventListener("click", function() {
         if (evaluationResult) {
+            let createElem2 = document.createElement("li");
+            let textTwo = document.createTextNode(inputDisplay.textContent);
+            createElem2.appendChild(textTwo);
+            historyNode.appendChild(createElem2);
+
+            let createElem = document.createElement("li");
+            let textOne = document.createTextNode(inputOutput.textContent);
+            createElem.appendChild(textOne);
+            historyNode.prepend(createElem);
+
             inputOutput.textContent = "";
             inputDisplay.textContent = baseNum.value;
 
             evaluationResult = false;
-            inputOutput.textContent += inputDisplay.textContent;
-
-        } else if ((inputDisplay.textContent !== "") && (inputOutput.textContent !== "")) {
-            inputDisplay.textContent = baseNum.value;
+        }
+        // inputOutput.textContent += inputDisplay.textContent;
+        else if ((inputDisplay.textContent !== "") && (inputOutput.textContent !== "")) {
+            inputDisplay.textContent += baseNum.value;
         } else {
             inputDisplay.textContent += baseNum.value;
+
         }
     });
 });
@@ -106,7 +118,7 @@ clearBtn.addEventListener("click", function() {
 });
 
 //Button keypress operation
-document.addEventListener("keypress", function (e) {
+document.addEventListener("keypress", function(e) {
 
     const validKeyCode = [
         48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
@@ -137,7 +149,7 @@ document.addEventListener("keypress", function (e) {
 //Backspace button
 backSpace.addEventListener("click", function() {
     let currentDisplay = inputDisplay.textContent;
-    inputDisplay.textContent = currentDisplay.substr(0, currentDisplay.length-1);
+    inputDisplay.textContent = currentDisplay.substr(0, currentDisplay.length - 1);
 });
 
 //Equals button
@@ -146,15 +158,15 @@ equals.addEventListener("click", function() {
 
     let currentDisplay = eval(inputOutput.textContent);
     inputDisplay.textContent = currentDisplay;
-    
+
     evaluationResult = true;
 });
 
 //Send stuff to .p-output
-baseOperator.forEach(function (baseOperator) {
-    baseOperator.addEventListener("click", function () {
+baseOperator.forEach(function(baseOperator) {
+    baseOperator.addEventListener("click", function() {
         inputOutput.textContent += inputDisplay.textContent + baseOperator.value;
         if (evaluationResult)
-        inputOutput.textContent = inputDisplay.textContent + baseOperator.value;
+            inputOutput.textContent = inputDisplay.textContent + baseOperator.value;
     });
 });
