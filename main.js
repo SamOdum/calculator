@@ -17,6 +17,8 @@ const equals = document.getElementById("equals");
 const historyNode = document.querySelector(".history-content");
 const trash = document.querySelector(".trash-button");
 let resultEvaluation = false;
+let ongoingComputation = false;
+let continueComputation = false;
 
 
 /* ************************ */
@@ -34,9 +36,9 @@ function swapButtons() {
         if (sciOperator[i].classList == "sci-operator first-set is-visible")
             sciOperator[i].classList.remove("is-visible");
         else if (sciOperator[i].classList == "sci-operator second-set is-visible")
-        sciOperator[i].classList.remove("is-visible");
-    else
-        sciOperator[i].classList.add("is-visible");
+            sciOperator[i].classList.remove("is-visible");
+        else
+            sciOperator[i].classList.add("is-visible");
 
 
     console.log("You Clicked Swap!");
@@ -50,14 +52,14 @@ function swapButtons() {
 
 //listen for click on swapBtn and call swapButtons()
 swapBtn.addEventListener("click", swapButtons);
-swapBtn.addEventListener("click", function() {
+swapBtn.addEventListener("click", function () {
     swapBtn.classList.toggle("is-clicked");
 });
 
 
 //Button click operation
-sciOperator.forEach(function(sciOperator) {
-    sciOperator.addEventListener("click", function() {
+sciOperator.forEach(function (sciOperator) {
+    sciOperator.addEventListener("click", function () {
         for (let i = 0; i < sciOperator.length; i++) {
             if (sciOperator[i].classList.contains("base-number"))
                 inputDisplay.textContent = inputDisplay.textContent;
@@ -84,66 +86,64 @@ sciOperator.forEach(function(sciOperator) {
  *   If not, concat and print to Display.
  */
 
-baseNum.forEach(function(baseNum) {
-    baseNum.addEventListener("click", function() {
+baseNum.forEach(function (baseNum) {
+    baseNum.addEventListener("click", function () {
 
         //When number button is clicked and resultEvaluation is false
         //If last entry of Output is Base-operator
-			//set Display to Number
-		//else
-             //set Display to Display+ Number
-             
-             
-       
-        if (resultEvaluation == false) {
-            
-            let lastCharacter = inputOutput.textContent.length-1;
-            
-            if ( (inputOutput.textContent == "")) {
+        //set Display to Number
+        //else
+        //set Display to Display+ Number
+
+
+
+        if (resultEvaluation === false) {
+            if (ongoingComputation === false)
                 inputDisplay.textContent += baseNum.value;
-            } else {
+            else {
                 inputDisplay.textContent = baseNum.value;
+                ongoingComputation = false;
             }
-        }
-/*	
-When number button is clicked and resultEvaluation is true
-	>	create and set list item One to Output
-	>	create and set list item Two to Display
-	>	if History already has a child
-	>		prepend list item One and Two, in order, to History
-	>	else
-	>		append list items One and Two, in order, to History
-	>
-	> 	set Output to empty
-	> 	set Display to Number
-	> 	set resultEvaluation to false
-*/    
-        if (resultEvaluation) {
+        } else {
             let listItemOne = inputOutput.textContent;
             let listItemTwo = inputDisplay.textContent;
             let newNode = document.createElement("ul");
-                newNode.innerHTML = `<li>${listItemOne}</li><li>${listItemTwo}</li>`;
+            newNode.innerHTML = `<li>${listItemOne}</li><li>${listItemTwo}</li>`;
             if (historyNode.children.length > 0) {
                 historyNode.prepend(newNode);
-            }   else {
+            } else {
                 historyNode.append(newNode);
             }
-
             inputOutput.textContent = "";
             inputDisplay.textContent = baseNum.value;
             resultEvaluation = false;
         }
-    });
-});
+         
+        /*	
+        When number button is clicked and resultEvaluation is true
+            >	create and set list item One to Output
+            >	create and set list item Two to Display
+            >	if History already has a child
+            >		prepend list item One and Two, in order, to History
+            >	else
+            >		append list items One and Two, in order, to History
+            >
+            > 	set Output to empty
+            > 	set Display to Number
+            > 	set resultEvaluation to false
+        */
+    }
+);}
+);
 
 //Clear button behavior
-clearBtn.addEventListener("click", function() {
+clearBtn.addEventListener("click", function () {
     inputDisplay.textContent = "";
     inputOutput.textContent = "";
 });
 
 //Button keypress operation
-document.addEventListener("keypress", function(e) {
+document.addEventListener("keypress", function (e) {
 
     const validKeyCode = [
         48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
@@ -172,13 +172,13 @@ document.addEventListener("keypress", function(e) {
 });
 
 //Backspace button
-backSpace.addEventListener("click", function() {
+backSpace.addEventListener("click", function () {
     let currentDisplay = inputDisplay.textContent;
     inputDisplay.textContent = currentDisplay.substr(0, currentDisplay.length - 1);
 });
 
 //Equals button
-equals.addEventListener("click", function() {
+equals.addEventListener("click", function () {
     inputOutput.textContent += inputDisplay.textContent;
 
     let currentDisplay = eval(inputOutput.textContent);
@@ -188,14 +188,25 @@ equals.addEventListener("click", function() {
 });
 
 //Send stuff to .p-output
-baseOperator.forEach(function(baseOperator) {
-    baseOperator.addEventListener("click", function() {
-        inputOutput.textContent += inputDisplay.textContent + baseOperator.value;
-        if (resultEvaluation)
-            inputOutput.textContent = inputDisplay.textContent + baseOperator.value;
+baseOperator.forEach(function (baseOperator) {
+    baseOperator.addEventListener("click", function () {
+
+        if (resultEvaluation) {
+            if (inputOutput.textContent === "") {
+                inputOutput.textContent = inputDisplay.textContent + baseOperator.value;
+            }   else {
+                inputOutput.textContent = "";
+                inputOutput.textContent += inputDisplay.textContent + baseOperator.value;
+                ongoingComputation = true;
+            }
+        }   else
+            inputOutput.textContent += inputDisplay.textContent + baseOperator.value;
+            ongoingComputation = true;
+
     });
 });
 
-trash.addEventListener("click", function(){
+//Trash button behaviour
+trash.addEventListener("click", function () {
     historyNode.innerHTML = "";
 });
