@@ -14,8 +14,9 @@ const inputOutput = document.querySelector(".p-output");
 const clearBtn = document.getElementById("clear");
 const backSpace = document.getElementById("bck-space");
 const equals = document.getElementById("equals");
-let evaluationResult = false;
 const historyNode = document.querySelector(".history-content");
+const trash = document.querySelector(".trash-button");
+let resultEvaluation = false;
 
 
 /* ************************ */
@@ -85,28 +86,52 @@ sciOperator.forEach(function(sciOperator) {
 
 baseNum.forEach(function(baseNum) {
     baseNum.addEventListener("click", function() {
-        if (evaluationResult) {
-            let createElem2 = document.createElement("li");
-            let textTwo = document.createTextNode(inputDisplay.textContent);
-            createElem2.appendChild(textTwo);
-            historyNode.appendChild(createElem2);
 
-            let createElem = document.createElement("li");
-            let textOne = document.createTextNode(inputOutput.textContent);
-            createElem.appendChild(textOne);
-            historyNode.prepend(createElem);
+        //When number button is clicked and resultEvaluation is false
+        //If last entry of Output is Base-operator
+			//set Display to Number
+		//else
+             //set Display to Display+ Number
+             
+             
+       
+        if (resultEvaluation == false) {
+            
+            let lastCharacter = inputOutput.textContent.length-1;
+            
+            if ( (inputOutput.textContent == "")) {
+                inputDisplay.textContent += baseNum.value;
+            } else {
+                inputDisplay.textContent = baseNum.value;
+            }
+        }
+/*	
+When number button is clicked and resultEvaluation is true
+	>	create and set list item One to Output
+	>	create and set list item Two to Display
+	>	if History already has a child
+	>		prepend list item One and Two, in order, to History
+	>	else
+	>		append list items One and Two, in order, to History
+	>
+	> 	set Output to empty
+	> 	set Display to Number
+	> 	set resultEvaluation to false
+*/    
+        if (resultEvaluation) {
+            let listItemOne = inputOutput.textContent;
+            let listItemTwo = inputDisplay.textContent;
+            let newNode = document.createElement("ul");
+                newNode.innerHTML = `<li>${listItemOne}</li><li>${listItemTwo}</li>`;
+            if (historyNode.children.length > 0) {
+                historyNode.prepend(newNode);
+            }   else {
+                historyNode.append(newNode);
+            }
 
             inputOutput.textContent = "";
             inputDisplay.textContent = baseNum.value;
-
-            evaluationResult = false;
-        }
-        // inputOutput.textContent += inputDisplay.textContent;
-        else if ((inputDisplay.textContent !== "") && (inputOutput.textContent !== "")) {
-            inputDisplay.textContent += baseNum.value;
-        } else {
-            inputDisplay.textContent += baseNum.value;
-
+            resultEvaluation = false;
         }
     });
 });
@@ -159,14 +184,18 @@ equals.addEventListener("click", function() {
     let currentDisplay = eval(inputOutput.textContent);
     inputDisplay.textContent = currentDisplay;
 
-    evaluationResult = true;
+    resultEvaluation = true;
 });
 
 //Send stuff to .p-output
 baseOperator.forEach(function(baseOperator) {
     baseOperator.addEventListener("click", function() {
         inputOutput.textContent += inputDisplay.textContent + baseOperator.value;
-        if (evaluationResult)
+        if (resultEvaluation)
             inputOutput.textContent = inputDisplay.textContent + baseOperator.value;
     });
+});
+
+trash.addEventListener("click", function(){
+    historyNode.innerHTML = "";
 });
