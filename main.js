@@ -198,6 +198,7 @@ baseOperator.forEach(function (baseOperator) {
                 inputOutput.textContent = "";
                 inputOutput.textContent += inputDisplay.textContent + baseOperator.value;
                 ongoingComputation = true;
+                resultEvaluation = false;
             }
         }   else
             inputOutput.textContent += inputDisplay.textContent + baseOperator.value;
