@@ -12,6 +12,7 @@ const baseNum = document.querySelectorAll(".base-number");
 const inputDisplay = document.querySelector(".p-display");
 const inputOutput = document.querySelector(".p-output");
 const clearBtn = document.getElementById("clear");
+const ceBtn = document.getElementById("ce");
 const backSpace = document.getElementById("bck-space");
 const equals = document.getElementById("equals");
 const historyNode = document.querySelector(".history-content");
@@ -19,6 +20,7 @@ const trash = document.querySelector(".trash-button");
 let resultEvaluation = false;
 let ongoingComputation = false;
 let continueComputation = false;
+let removeZero = true;
 
 
 /* ************************ */
@@ -88,54 +90,31 @@ sciOperator.forEach(function (sciOperator) {
 
 baseNum.forEach(function (baseNum) {
     baseNum.addEventListener("click", function () {
+            
 
-        //When number button is clicked and resultEvaluation is false
-        //If last entry of Output is Base-operator
-        //set Display to Number
-        //else
-        //set Display to Display+ Number
+         if (resultEvaluation) {
 
-
-
-        if (resultEvaluation === false) {
-            if (ongoingComputation === false)
-                inputDisplay.textContent += baseNum.value;
-            else {
-                inputDisplay.textContent = baseNum.value;
-                ongoingComputation = false;
-            }
-        } else {
-            let listItemOne = inputOutput.textContent;
-            let listItemTwo = inputDisplay.textContent;
-            let newNode = document.createElement("ul");
-            newNode.innerHTML = `<li>${listItemOne}</li><li>${listItemTwo}</li>`;
-            if (historyNode.children.length > 0) {
-                historyNode.prepend(newNode);
-            } else {
-                historyNode.append(newNode);
-            }
             inputOutput.textContent = "";
             inputDisplay.textContent = baseNum.value;
             resultEvaluation = false;
+        } else {
+            if (ongoingComputation){
+                inputDisplay.textContent = baseNum.value;
+                ongoingComputation = false;
+            } else {
+                if (removeZero) {
+                    inputDisplay.textContent = baseNum.value;
+                    removeZero = false;
+                } else
+                inputDisplay.textContent += baseNum.value;
+            }  
         }
 
-        /*	
-        When number button is clicked and resultEvaluation is true
-            >	create and set list item One to Output
-            >	create and set list item Two to Display
-            >	if History already has a child
-            >		prepend list item One and Two, in order, to History
-            >	else
-            >		append list items One and Two, in order, to History
-            >
-            > 	set Output to empty
-            > 	set Display to Number
-            > 	set resultEvaluation to false
-        */
-    }
+        
+
+        }
     );
-}
-);
+});
 
 //Clear button behavior
 clearBtn.addEventListener("click", function () {
@@ -151,12 +130,16 @@ clearBtn.addEventListener("click", function () {
             historyNode.append(newNode);
         }
         resultEvaluation = false;
-        inputDisplay.textContent = "";
+        inputDisplay.textContent = 0;
         inputOutput.textContent = "";
     } else {
-        inputDisplay.textContent = "";
+        inputDisplay.textContent = 0;
         inputOutput.textContent = "";
     }
+});
+
+ceBtn.addEventListener("click", function(){
+    inputDisplay.textContent = 0;
 });
 
 //Button keypress operation
@@ -191,19 +174,49 @@ document.addEventListener("keypress", function (e) {
 //Backspace button
 backSpace.addEventListener("click", function () {
     let currentDisplay = inputDisplay.textContent;
+    if (resultEvaluation) {
+        inputDisplay.textContent = currentDisplay;
+    } else {
     inputDisplay.textContent = currentDisplay.substr(0, currentDisplay.length - 1);
+}
 });
 
 //Equals button
 equals.addEventListener("click", function () {
-    if (resultEvaluation) {
-        inputOutput.textContent = inputOutput.textContent;
-        inputDisplay.textContent = inputDisplay.textContent;
-    } else {
-        inputOutput.textContent += inputDisplay.textContent;
+    let operand = inputOutput.textContent.slice(-1);
+    let  lastOutputValue;
+    let  slicedLastOutputValue;
+    let  lastInputDisplayValue;
 
+    // if (resultEvaluation) {
+    //     console.log(logged);
+    //     let recurring = inputDisplay.textContent + operand + lastDisplayValue;
+    //     inputDisplay.textContent = recurring;
+    // } else {
+        lastOutputValue = inputOutput.textContent;
+        slicedLastOutputValue = lastOutputValue.slice(-1);
+        lastInputDisplayValue = inputDisplay.textContent;
+        inputOutput.textContent += inputDisplay.textContent;
         let currentDisplay = eval(inputOutput.textContent);
         inputDisplay.textContent = currentDisplay;
+        
+        let listItemOne = inputOutput.textContent;
+        let listItemTwo = inputDisplay.textContent;
+        let newNode = document.createElement("ul");
+        newNode.innerHTML = `<li>${listItemOne} =</li><li>${listItemTwo}</li>`;
+        if (historyNode.children.length > 0) {
+            historyNode.prepend(newNode);
+        } else {
+            historyNode.append(newNode);
+        }
+        inputOutput.textContent = "";
+        resultEvaluation = true;
+        console.log(lastOutputValue);
+    // }
+    if (resultEvaluation){
+        let progression = eval(inputDisplay.textContent+slicedLastOutputValue+lastInputDisplayValue);
+        console.log(lastOutputValue, lastInputDisplayValue, slicedLastOutputValue);
+        inputDisplay.textContent = progression;
 
         resultEvaluation = true;
     }
@@ -216,7 +229,11 @@ baseOperator.forEach(function (baseOperator) {
         const lastStrChar = inputOutput.textContent.slice(-1);
 
         if (!resultEvaluation && inputOutput.textContent === "") {
+            if (baseOperator.value == "(") {
+                inputOutput.textContent = baseOperator.value;
+            } else {
             inputOutput.textContent = inputDisplay.textContent + baseOperator.value;
+        }
         }
         if (!resultEvaluation && inputOutput.textContent !== "") {
             if (!numberRegex.test(lastStrChar)) {
@@ -228,8 +245,12 @@ baseOperator.forEach(function (baseOperator) {
             }
         }
         if (resultEvaluation) {
-            inputOutput.textContent += baseOperator.value;
-            inputDisplay.textContent = 0;
+            if (baseOperator.value == "(") { 
+                inputOutput.textContent = baseOperator.value;
+            } else {
+            inputOutput.textContent = inputDisplay.textContent + baseOperator.value;
+            logged = baseOperator.value + inputDisplay.textContent;
+        }
 
             ongoingComputation = true;
             resultEvaluation = false;
